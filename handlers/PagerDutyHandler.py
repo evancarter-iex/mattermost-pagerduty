@@ -71,44 +71,40 @@ class PagerDutyHandler(RequestHandler):
             """
             assignees = " & ".join(
                 "[{}]({})".format(
-                    assignee["object"]["name"],
-                    assignee["object"]["html_url"])
-                for assignee in message["data"]["incident"]["assigned_to"]
+                    assignee["assignee"]["summary"],
+                    assignee["assignee"]["html_url"])
+                for assignee in message["incident"]["assignments"]
             )
 
             incident_details = '[View incident details]({})'.format(
-                message["data"]["incident"]["html_url"]
+                message["incident"]["html_url"]
             )
             incident_details = (
-                self.incident_details[message["type"]] + incident_details
+                self.incident_details[message["event"]] + incident_details
             )
 
-            if message["type"] == "incident.acknowledge":
+            if message["event"] == "incident.acknowledge":
                 acked_by = " & " .join(
                     "[{}]({})".format(
-                        acknowledger["object"]["name"],
-                        acknowledger["object"]["html_url"])
+                        acknowledger["acknowledger"]["summary"],
+                        acknowledger["acknowledger"]["html_url"])
                     for acknowledger
-                    in message["data"]["incident"]["acknowledgers"]
+                    in message["incident"]["acknowledgements"]
                 )
                 incident_details = incident_details.format(acked_by)
 
-            elif message["type"] == "incident.assign":
+            elif message["event"] == "incident.assign":
                 incident_details = incident_details.format(assignees)
 
-            elif message["type"] == "incident.resolve":
-                incident_details = incident_details.format(
+            elif message["event"] == "incident.resolve":
+                resolved_by = " & " .join(
                     "[{}]({})".format(
-                        message["data"]
-                        ["incident"]
-                        ["resolved_by_user"]
-                        ["name"],
-                        message["data"]
-                        ["incident"]
-                        ["resolved_by_user"]
-                        ["html_url"],
-                    )
+                        resolver["summary"],
+                        resolver["html_url"])
+                    for resolver
+                    in message["incident"]["log_entries"]["agent"]
                 )
+                incident_details = incident_details.format(resolved_by)
 
             payload_dict = {
                 'icon_url': 'https://i.imgur.com/LGpqJQy.png',
@@ -116,52 +112,37 @@ class PagerDutyHandler(RequestHandler):
                 'attachments': [
                     {
                         'fallback': self.FallbackText.format(
-                            message["data"]
-                            ["incident"]
+                            message["incident"]
                             ["status"],
-                            message["data"]
-                            ["incident"]
-                            ["service"]
-                            ["name"],
-                            message["data"]
-                            ["incident"]
-                            ["service"]
+                            message["incident"]
+                            ["summary"],
+                            message["incident"]
                             ["html_url"],
-                            message["data"]
-                            ["incident"]
-                            ["trigger_summary_data"]
-                            ["subject"],
+                            message["incident"]
+                            ["title"],
                             assignees,
                         ),
-                        'color': self.colors[message["type"]],
+                        'color': self.colors[message["event"]],
                         'fields':[
                             {
                                 'short': True,
                                 'title': 'Event',
                                 'value': 'Incident {} ([{}]({})) (#{})'.format(
-                                    message["data"]
-                                    ["incident"]
+                                    message["incident"]
                                     ["status"],
-                                    message["data"]
-                                    ["incident"]
-                                    ["service"]
-                                    ["name"],
-                                    message["data"]
-                                    ["incident"]
-                                    ["service"]
+                                    message["incident"]
+                                    ["summary"],
+                                    message["incident"]
                                     ["html_url"],
-                                    message["data"]
-                                    ["incident"]
+                                    message["incident"]
                                     ["incident_number"],
                                 ),
                             },
                             {
                                 'short': True,
                                 'title': 'Subject',
-                                'value': message["data"]
-                                ["incident"]
-                                ["trigger_summary_data"]
-                                ["subject"],
+                                'value': message["incident"]
+                                ["title"],
                             },
                             {
                                 'short': True,
