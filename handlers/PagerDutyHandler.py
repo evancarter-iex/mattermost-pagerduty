@@ -99,10 +99,10 @@ class PagerDutyHandler(RequestHandler):
             elif message["event"] == "incident.resolve":
                 resolved_by = " & " .join(
                     "[{}]({})".format(
-                        resolver["summary"],
-                        resolver["html_url"])
+                        resolver["agent"]["summary"],
+                        resolver["agent"]["html_url"])
                     for resolver
-                    in message["incident"]["log_entries"]["agent"]
+                    in message["log_entries"]
                 )
                 incident_details = incident_details.format(resolved_by)
 
