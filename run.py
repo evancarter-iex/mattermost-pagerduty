@@ -19,10 +19,11 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--port', type=int, default=8000)
+    parser.add_argument('-a', '--address', default='127.0.0.1')
     args = parser.parse_args()
 
     http_server = HTTPServer(application)
-    http_server.listen(args.port, address='0.0.0.0')
+    http_server.listen(args.port, address=args.address)
     IOLoop.instance().start()
 
 
