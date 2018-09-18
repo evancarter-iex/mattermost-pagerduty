@@ -7,7 +7,7 @@ Type=idle
 Environment=MATTERMOST_PAGERDUTY_URL=https://127.0.0.1/blah
 User=mattermost
 Group=mattermost
-ExecStart=/usr/bin/python /opt/pagerduty/run.py > /opt/pagerduty/run.log 2>&1
+ExecStart=/usr/bin/python /opt/pagerduty/run.py --port 8001 > /opt/pagerduty/run.log 2>&1
 Restart=on-failure
 
 [Install]

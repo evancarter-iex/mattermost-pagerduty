@@ -18,7 +18,7 @@ def main():
     enable_pretty_logging()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--port', type=int, default=8001)
+    parser.add_argument('-p', '--port', type=int, default=8000)
     args = parser.parse_args()
 
     http_server = HTTPServer(application)
