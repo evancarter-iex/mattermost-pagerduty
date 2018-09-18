@@ -64,8 +64,7 @@ class PagerDutyHandler(RequestHandler):
         try:
             channel = self.request.uri.split('=')[1]
         except IndexError:
-            channel = "town-square"
-        
+            channel = "town-square"  
         data = json.loads(self.request.body)
         for message in data["messages"]:
             """
