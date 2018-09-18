@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 from tornado.ioloop import IOLoop
 from tornado.web import Application
 from tornado.httpserver import HTTPServer
@@ -7,7 +6,6 @@ from tornado.log import enable_pretty_logging
 
 from handlers.PagerDutyHandler import PagerDutyHandler
 import argparse
-import opt
 
 application = Application(
     [
