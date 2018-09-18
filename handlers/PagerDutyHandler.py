@@ -61,6 +61,11 @@ class PagerDutyHandler(RequestHandler):
 
     @coroutine
     def post(self):
+        try:
+            channel = self.request.uri.split('=')[1]
+        except IndexError:
+            channel = "town-square"
+        
         data = json.loads(self.request.body)
         for message in data["messages"]:
             """
@@ -106,6 +111,7 @@ class PagerDutyHandler(RequestHandler):
 
             payload_dict = {
                 'icon_url': 'https://i.imgur.com/LGpqJQy.png',
+                'channel': channel,
                 'username': 'Pagerduty',
                 'attachments': [
                     {

@@ -10,3 +10,10 @@ At a minimum you need to define your mattermost hook url with an environmental v
 
 #### Running
 This application will by default listen on port `8000`. To start it run `python run.py` or alternatively run it in supervisord or similar.
+
+#### Example request url
+Using a json POST blob hit the following url to post to the channel "Town-square"
+
+```
+http://1.2.3.4/PagerDutyNotification?channel=town-square 
+```
