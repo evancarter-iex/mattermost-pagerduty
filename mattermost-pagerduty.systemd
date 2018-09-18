@@ -1,0 +1,14 @@
+[Unit]
+Description=Mattermost Pagerduty Webhook Listener
+After=multi-user.target
+
+[Service]
+Type=idle
+Environment=MATTERMOST_PAGERDUTY_URL=https://127.0.0.1/blah
+User=mattermost
+Group=mattermost
+ExecStart=/usr/bin/python /opt/pagerduty/run.py > /opt/pagerduty/run.log 2>&1
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

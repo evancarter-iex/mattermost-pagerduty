@@ -2,9 +2,7 @@ from tornado.web import RequestHandler
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.gen import coroutine, Return
 from tornado.ioloop import IOLoop
-from tornado.options import options
-
-
+import os
 import json
 
 
@@ -14,7 +12,7 @@ class PagerDutyHandler(RequestHandler):
         """
         This is actually important. :D
         """
-        self.mattermost_url = options.mattermost_url
+        self.mattermost_url = os.environ['MATTERMOST_PAGERDUTY_URL']
 
         """
         This maps message types to border
